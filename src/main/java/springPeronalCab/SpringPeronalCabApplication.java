@@ -5,8 +5,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -21,6 +28,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class SpringPeronalCabApplication {
@@ -32,11 +41,15 @@ public class SpringPeronalCabApplication {
     @Configuration
     @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+        @Override
+        protected AuthenticationManager authenticationManager() throws Exception {
+            return new SampleAuthenticationManager();
+        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.httpBasic().and().logout().and().authorizeRequests()
-                    .antMatchers("/index.html", "/home.html", "/login.html", "/").permitAll().anyRequest()
+                    .antMatchers( "/home.html", "/login.html", "/").permitAll().anyRequest()
                     .authenticated().and().csrf()
                     .csrfTokenRepository(csrfTokenRepository()).and()
                     .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
@@ -72,4 +85,20 @@ public class SpringPeronalCabApplication {
         }
 
     }
+
     }
+class SampleAuthenticationManager implements AuthenticationManager {
+    static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
+
+    static {
+        AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    public Authentication authenticate(Authentication auth) throws AuthenticationException {
+        if (auth.getName().equals(auth.getCredentials())) {
+            return new UsernamePasswordAuthenticationToken(auth.getName(),
+                    auth.getCredentials(), AUTHORITIES);
+        }
+        throw new BadCredentialsException("Bad Credentials");
+    }
+}
