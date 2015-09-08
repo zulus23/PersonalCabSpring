@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+
 </head>
-<body>
-  <h1>Привет 4</h1>
+<body ng-controller="ApplicationController as vm">
+  <h1>{{vm.test}} </h1>
+  <h2> Id = {{vm.gretting.id}}</h2>
+  <h2> Content = {{vm.gretting.content}}</h2>
+
+  <script src="assests/vendors/jquery/dist/jquery.min.js"></script>
+  <script src="assests/vendors/angular/angular.min.js"></script>
+
+
+  <script src="app/app.module.js"></script>
+  <script src="app/application.js"></script>
+
 </body>
 </html>

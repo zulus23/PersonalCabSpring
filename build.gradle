@@ -15,7 +15,8 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot' 
+apply plugin: 'spring-boot'
+
 
 jar {
     baseName = 'personalcab'
@@ -23,6 +24,15 @@ jar {
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+
+configurations {
+    webjars
+    webjars.extendsFrom(compile)
+
+}
+
+
 
 repositories {
     mavenCentral()
@@ -34,6 +44,13 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.webjars:jquery:2.1.4")
+    compile("org.webjars:angularjs:1.4.4")
+    compile("org.webjars:bootstrap:3.3.5")
+
+
+
+
     testCompile("org.springframework.boot:spring-boot-starter-test") 
 }
 
@@ -44,6 +61,32 @@ eclipse {
          containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
 }
+
+task('webjars resources extraction', type: Copy) {
+    configurations.webjars.each {jar ->
+
+        def config = configurations.webjars.resolvedConfiguration
+        def artifact = config.resolvedArtifacts.find {
+            it.file.toString() == jar.absolutePath
+        }
+
+        def upStreamVersion = "${artifact.moduleVersion.id.version}"
+        upStreamVersion = upStreamVersion.replaceAll(/(-[\d.-]+)/, '')
+
+        copy {
+            from zipTree(jar)
+            into file("${buildDir}/webjars-content/${artifact.name}")
+        }
+        copy {
+            from "${buildDir}/webjars-content/${artifact.name}/META-INF/resources/webjars/${artifact.name}/${upStreamVersion}",
+                    "${buildDir}/webjars-content/${artifact.name}/META-INF/resources/webjars/${artifact.name}/${artifact.moduleVersion.id.version}"
+
+            into "${buildDir}/assets/vendor/${artifact.name}"
+        }
+    }
+}
+
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'

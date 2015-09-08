@@ -3,6 +3,7 @@ package springPeronalCab;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,73 +33,75 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"ru.zhukov.db",
+                               "springPeronalCab"})
 public class SpringPeronalCabApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringPeronalCabApplication.class, args);
 
     }
-    @Configuration
-    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-    protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-        @Override
-        protected AuthenticationManager authenticationManager() throws Exception {
-            return new SampleAuthenticationManager();
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.httpBasic().and().logout().and().authorizeRequests()
-                    .antMatchers( "/home.html", "/login.html", "/").permitAll().anyRequest()
-                    .authenticated().and().csrf()
-                    .csrfTokenRepository(csrfTokenRepository()).and()
-                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
-        }
-
-        private Filter csrfHeaderFilter() {
-            return new OncePerRequestFilter() {
-                @Override
-                protected void doFilterInternal(HttpServletRequest request,
-                                                HttpServletResponse response, FilterChain filterChain)
-                        throws ServletException, IOException {
-                    CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-                            .getName());
-                    if (csrf != null) {
-                        Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
-                        String token = csrf.getToken();
-                        if (cookie == null || token != null && !token.equals(cookie.getValue())) {
-                            cookie = new Cookie("XSRF-TOKEN", token);
-                            cookie.setPath("/");
-                            response.addCookie(cookie);
-                        }
-                    }
-                    filterChain.doFilter(request, response);
-                    /**/
-                }
-            };
-        }
-
-        private CsrfTokenRepository csrfTokenRepository() {
-            HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-            repository.setHeaderName("X-XSRF-TOKEN");
-            return repository;
-        }
+//    @Configuration
+//    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+//    protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+//      /*  @Override
+//        protected AuthenticationManager authenticationManager() throws Exception {
+//            return new SampleAuthenticationManager();
+//        }*/
+//
+//        @Override
+//        protected void configure(HttpSecurity http) throws Exception {
+//            http.httpBasic().and().logout().and().authorizeRequests()
+//                    .antMatchers( "/home.html", "/login.html", "/index.html","/").permitAll().anyRequest()
+//                    .authenticated();/*.and().csrf()
+//                    .csrfTokenRepository(csrfTokenRepository()).and()
+//                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);*/
+//        }
+//
+//        private Filter csrfHeaderFilter() {
+//            return new OncePerRequestFilter() {
+//                @Override
+//                protected void doFilterInternal(HttpServletRequest request,
+//                                                HttpServletResponse response, FilterChain filterChain)
+//                        throws ServletException, IOException {
+//                    CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
+//                            .getName());
+//                    if (csrf != null) {
+//                        Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
+//                        String token = csrf.getToken();
+//                        if (cookie == null || token != null && !token.equals(cookie.getValue())) {
+//                            cookie = new Cookie("XSRF-TOKEN", token);
+//                            cookie.setPath("/");
+//                            response.addCookie(cookie);
+//                        }
+//                    }
+//                    filterChain.doFilter(request, response);
+//                    /**/
+//                }
+//            };
+//        }
+//
+//        private CsrfTokenRepository csrfTokenRepository() {
+//            HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+//            repository.setHeaderName("X-XSRF-TOKEN");
+//            return repository;
+//        }
+//
+//    }
 
     }
-
-    }
-class SampleAuthenticationManager implements AuthenticationManager {
-    static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
-
-    static {
-        AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    public Authentication authenticate(Authentication auth) throws AuthenticationException {
-        if (auth.getName().equals(auth.getCredentials())) {
-            return new UsernamePasswordAuthenticationToken(auth.getName(),
-                    auth.getCredentials(), AUTHORITIES);
-        }
-        throw new BadCredentialsException("Bad Credentials");
-    }
-}
+//class SampleAuthenticationManager implements AuthenticationManager {
+//    static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
+//
+//    static {
+//        AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_USER"));
+//    }
+//
+//    public Authentication authenticate(Authentication auth) throws AuthenticationException {
+//        if (auth.getName().equals(1)) {
+//            return new UsernamePasswordAuthenticationToken(auth.getName(),
+//                    auth.getCredentials(), AUTHORITIES);
+//        }
+//        throw new BadCredentialsException("Bad Credentials");
+//    }
+//}
