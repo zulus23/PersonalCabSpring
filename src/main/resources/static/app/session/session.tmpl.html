@@ -1,0 +1,11 @@
+<div class="container" ng-controller="HomeController as home1" >
+<h1>Greeting</h1>
+<div ng-show="authenticated ">
+    <p>The ID is {{home1.greeting.id}}</p>
+    <p>The content is {{home1.greeting.content}}</p>
+</div>
+<div  ng-show="!authenticated">
+    <p>Login to see your greeting</p>
+    <button class="btn btn-default btn-info" ><a href="#/login"> Login</a></button>
+</div>
+</div>

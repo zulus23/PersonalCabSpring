@@ -9,18 +9,27 @@
         }
     </style>
 
+    <link rel="stylesheet" href="assests/vendors/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assests/css/application.css"/>
+
+
 </head>
-<body ng-controller="ApplicationController as vm">
-  <h1>{{vm.test}} </h1>
-  <h2> Id = {{vm.gretting.id}}</h2>
-  <h2> Content = {{vm.gretting.content}}</h2>
+<body>
+
+  <div ng-view class="container"></div>
+
+
+
 
   <script src="assests/vendors/jquery/dist/jquery.min.js"></script>
   <script src="assests/vendors/angular/angular.min.js"></script>
+  <script src="assests/vendors/angular/angular-route.min.js"></script>
 
 
   <script src="app/app.module.js"></script>
-  <script src="app/application.js"></script>
+  <script src="app/session/homeController.js"></script>
+  <script src="app/login/loginController.js"></script>
+
 
 </body>
 </html>

@@ -3,6 +3,7 @@ package ru.zhukov.db;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -20,4 +21,10 @@ public class TestResources {
         model.put("content", "Привет от меня");
         return model;
     }
+
+    @RequestMapping("/user")
+    public Principal user(Principal user){
+        return  user;
+    }
+
 }
