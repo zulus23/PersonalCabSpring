@@ -1,28 +1,34 @@
-<div class="container login-page ui-corner-all" data-ng-controller="LoginController as login">
-    <div class="form-signin-heading " > Вход на личную страницу </div>
-    <form class="form-signin" name="loginForm" >
-        <fieldset >
-            <div >
-                To manage your MongoDB databases, log in.<p></p>
-                If you don't have an account, you can
-                eee
+<div class="container " data-ng-controller="LoginController as login">
+    <div id="loginbox" class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+            <div class="page-header">
+                <div class="panel-title text-center"><h3>Вход на личную страницу</h3></div>
             </div>
-            <div class="tinyLineBreak"></div>
-
-            <div class="form-group">
-                <label for="login-username" class="control-label">Ф.И.О.(полностью)</label>
-                <input class="required ui-corner-all"
-                       type="text" id="login-username" name="username" ng-model="login.credentials.username">
+            <div class="panel-body">
+                <form id ="loginForm" class="form-horizontal has-error" name="loginForm">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-user"></i>
+                            </span>
+                                <input class="required form-control"
+                                       type="text" id="login-username" name="username" ng-model="login.credentials.username"
+                                       placeholder="Ф.И.О(полностью)">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-lock"></i>
+                            </span>
+                                <input class="required  form-control" type="password" id="login-password"
+                                       name="password" data-ng-model="login.credentials.password" placeholder="СНИЛС">
+                        </div>
+                    <div>
+                    <div class="btns col-sm-12">
+                        <button type="submit" href="#" class="btn btn-primary pull-right" ng-click="login.login(loginForm)">
+                            <i class="glyphicon glyphicon-log-in"></i>  Войти  </button>
+                    </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="login-password" class="control-label">СНИЛС</label>
-                <input class="required ui-corner-all" type="password" id="login-password"
-                       name="password" data-ng-model="login.credentials.password">
-            </div>
-        </fieldset>
-        <fieldset class="btns">
-            <button type="submit" class="btn btn-primary" ng-click="login.login(loginForm)">Войти</button>
-        </fieldset>
-    </form>
-
+        </div>
+    </div>
 </div>
