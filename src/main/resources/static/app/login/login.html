@@ -1,25 +1,32 @@
 <div class="container " data-ng-controller="LoginController as login">
-    <div id="loginbox" class="col-md-6 col-md-offset-3">
+    <div id="loginbox" class="col-md-4 col-md-offset-4">
         <div class="panel panel-default">
             <div class="page-header">
                 <div class="panel-title text-center"><h3>Вход на личную страницу</h3></div>
             </div>
             <div class="panel-body">
-                <form id ="loginForm" class="form-horizontal has-error" name="loginForm">
-                        <div class="input-group">
+                <form id ="loginForm" class="form-horizontal" name="loginForm" novalidate>
+                        <div class="input-group" ng-class="{'has-error':loginForm.username.$invalid}">
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-user"></i>
                             </span>
                                 <input class="required form-control"
-                                       type="text" id="login-username" name="username" ng-model="login.credentials.username"
-                                       placeholder="Ф.И.О(полностью)">
+                                       autofocus
+                                       type="text" id="login-username" name="username"
+                                       ng-model="login.credentials.username"
+                                       ng-required="true"
+                                       placeholder="Ф.И.О(полностью)"
+
+                                        >
+
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-lock"></i>
                             </span>
                                 <input class="required  form-control" type="password" id="login-password"
-                                       name="password" data-ng-model="login.credentials.password" placeholder="СНИЛС">
+                                       name="password" data-ng-model="login.credentials.password" placeholder="СНИЛС"
+                                       ng-required="true">
                         </div>
                     <div>
                     <div class="btns col-sm-12">
