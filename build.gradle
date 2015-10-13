@@ -6,13 +6,17 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+
     }
 }
 
-apply plugin: 'java'
+
+apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
@@ -25,29 +29,32 @@ jar {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
+/*
 configurations {
     webjars
     webjars.extendsFrom(compile)
 
 }
 
-
+*/
 
 repositories {
     mavenCentral()
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://repo.spring.io/milestone" }
+   // maven { url 'http://dl.bintray.com/sbuettner/maven' }
 }
 
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile('org.codehaus.groovy:groovy')
     compile("org.webjars:jquery:2.1.4")
     compile("org.webjars:angularjs:1.4.4")
+    compile("org.webjars:angular-ui-router:0.2.15")
     compile("org.webjars:bootstrap:3.3.5")
-
+   // compile("de.infinit:spring-boot-autoconfigure-wro4j:0.0.6")
 
 
 
@@ -62,32 +69,9 @@ eclipse {
     }
 }
 
-task('webjars resources extraction', type: Copy) {
-    configurations.webjars.each {jar ->
-
-        def config = configurations.webjars.resolvedConfiguration
-        def artifact = config.resolvedArtifacts.find {
-            it.file.toString() == jar.absolutePath
-        }
-
-        def upStreamVersion = "${artifact.moduleVersion.id.version}"
-        upStreamVersion = upStreamVersion.replaceAll(/(-[\d.-]+)/, '')
-
-        copy {
-            from zipTree(jar)
-            into file("${buildDir}/webjars-content/${artifact.name}")
-        }
-        copy {
-            from "${buildDir}/webjars-content/${artifact.name}/META-INF/resources/webjars/${artifact.name}/${upStreamVersion}",
-                    "${buildDir}/webjars-content/${artifact.name}/META-INF/resources/webjars/${artifact.name}/${artifact.moduleVersion.id.version}"
-
-            into "${buildDir}/assets/vendor/${artifact.name}"
-        }
-    }
-}
-
-
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.7'
 }
+
+
+

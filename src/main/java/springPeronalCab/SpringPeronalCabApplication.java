@@ -52,7 +52,7 @@ public class SpringPeronalCabApplication {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.httpBasic().and().logout().and().authorizeRequests()
-                    .antMatchers("/home.html", "/login.html", "/index.html", "/app/**", "/assests/**", "/").permitAll().anyRequest()
+                    .antMatchers("/home.html", "/login.html", "/index.html", "/app/**", "/assests/**", "/webjars/**", "/").permitAll().anyRequest()
                     .authenticated().and()
                     .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                     .csrf()

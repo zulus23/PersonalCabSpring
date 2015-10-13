@@ -5,16 +5,21 @@
 (function(){
     'use strict'
 
-   angular.module('app',['ngRoute'])
-       .config(function($routeProvider,$httpProvider){
-          $routeProvider.when('/',{
-             templateUrl:'/app/session/session.tmpl.html'
-          }).when('/login',{
-             templateUrl:'/app/login/login.html'
-          }).otherwise('/');
+   angular.module('app',['ui.router'])
+       .config(['$urlRouterProvider','$httpProvider','$stateProvider',function($urlRouterProvider,$httpProvider,$stateProvider){
+           $urlRouterProvider.otherwise("/");
+           $stateProvider.state("home",{
+               url:"/",
+               templateUrl:'/app/session/session.tmpl.html'
+           }).state("login",{
+               url:"/login",
+               templateUrl:'/app/login/login.html'
+           });
+
+
            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
            $httpProvider.interceptors.push('APIInterceptor');
-       }).service('APIInterceptor',function($rootScope){
+       }]).service('APIInterceptor',function($rootScope){
            var service = this;
            service.request = function(config){
                 return config;

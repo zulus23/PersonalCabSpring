@@ -9,14 +9,15 @@
         .controller('HomeController',HomeController);
 
 
-    function HomeController($http,$rootScope,$location,commonService){
+    function HomeController($http,$rootScope,$state,commonService){
         var vm = this;
         vm.test = "Привет ";
         vm.gretting = {}
         vm.grettingSpeak = Gretting;
         vm.currentUser = {};
         $rootScope.$on('unauthorized', function() {
-                 $location.path('/login');
+                 //$location.path('/login');
+                 $state.go("login")
 
         });
         commonService.currentUser(function(user){
@@ -28,7 +29,8 @@
         vm.logout = function(){
             $http.post('logout',{}).success(function(data){
                 commonService.currentUser.authenticated = false;
-                $location.path('/login');
+                //$location.path('/login');
+                $state.go("login")
             }).error(function(data){
                 commonService.currentUser.authenticated = false;
             })

@@ -5,7 +5,7 @@
     angular.module('app')
         .controller('LoginController',LoginController);
 
-        function LoginController($rootScope, $scope, $http, $location, $route,commonService){
+        function LoginController($rootScope, $scope, $http, $state,commonService){
               var vm = this;
               vm.credentials = {};
               vm.login = login;
@@ -18,12 +18,14 @@
                       console.log(vm.credentials);
                       if (authenticated) {
                           console.log("Login succeeded")
-                          $location.path("/");
+                          //$location.path("/");
+                          $state.go("home");
                           $scope.error = false;
                           commonService.currentUser.authenticated = true;
                       } else {
                           console.log("Login failed")
-                          $location.path("/login");
+                          //$location.path("/login");
+                          $state.go("login");
                           $scope.error = true;
                           commonService.currentUser.authenticated = false;
                       }
