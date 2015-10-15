@@ -12,13 +12,13 @@
            $urlRouterProvider.otherwise("/");
            $stateProvider.state("home",{
                url:"/",
-               templateUrl:'/app/session/session.tmpl.html'
+               templateUrl:'app/session/session.tmpl.html'
            }).state("login",{
                url:"/login",
-               templateUrl:'/app/login/login.html'
+               templateUrl:'app/login/login.html'
            }).state("person",{
                url:"/person",
-               templateUrl:'/app/person/person.html'
+               templateUrl:'app/person/person.html'
            });
 
            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest'

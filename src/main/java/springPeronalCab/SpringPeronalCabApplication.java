@@ -19,6 +19,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
@@ -36,6 +37,7 @@ import java.util.List;
 @SpringBootApplication
 @ComponentScan(basePackages = {"ru.zhukov.db",
                                "springPeronalCab"})
+@Controller
 public class SpringPeronalCabApplication {
 
     public static void main(String[] args) {
@@ -59,13 +61,15 @@ public class SpringPeronalCabApplication {
 //
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.httpBasic().and().logout().and().authorizeRequests()
-                    .antMatchers("/home.html", "/login.html", "/index.html", "/app/**", "/assests/**",
-                            "/webjars/**", "/").permitAll().anyRequest()
+            http.httpBasic().and().authorizeRequests()
+                    .antMatchers("/index.html", "/", "/home", "/login", "/app/**", "/assests/**",
+                            "/webjars/**").permitAll()
+                    .antMatchers("/person").hasRole("USER")
+                    .anyRequest()
                     .authenticated().and()
-                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                     .csrf()
-                    .csrfTokenRepository(csrfTokenRepository());
+                    .csrfTokenRepository(csrfTokenRepository())
+                    .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
 //
         }
 //
