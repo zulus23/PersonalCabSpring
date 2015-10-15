@@ -9,37 +9,24 @@
         .controller('HomeController',HomeController);
 
 
-    function HomeController($http,$rootScope,$state,commonService){
+    function HomeController($http,$rootScope,$state,auth){
         var vm = this;
         vm.test = "Привет ";
         vm.gretting = {}
         vm.grettingSpeak = Gretting;
-        vm.currentUser = {};
-        $rootScope.$on('unauthorized', function() {
-                 //$location.path('/login');
-                 $state.go("login")
 
-        });
-        commonService.currentUser(function(user){
-            vm.currentUser =  user;
-        });
+        vm.authenticated = function() {
+            return auth.authenticated;
+        }
 
         //commonService.authenticate();
 
-        vm.logout = function(){
-            $http.post('logout',{}).success(function(data){
-                commonService.currentUser.authenticated = false;
-                //$location.path('/login');
-                $state.go("login")
-            }).error(function(data){
-                commonService.currentUser.authenticated = false;
-            })
-        }
+        vm.logout = auth.clear;
 
 
         Gretting();
         function Gretting() {
-            console.log(commonService.currentUser.authenticated);
+            console.log(auth.authenticated);
             $http.get('/testresource/').success(function (data) {
                 vm.gretting = data;
             }).error(function (err) {

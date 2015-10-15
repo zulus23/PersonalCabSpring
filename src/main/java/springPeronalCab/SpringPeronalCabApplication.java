@@ -19,6 +19,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
@@ -41,6 +42,12 @@ public class SpringPeronalCabApplication {
         SpringApplication.run(SpringPeronalCabApplication.class, args);
 
     }
+    @RequestMapping(value = "/{[path:[^\\.]*}")
+    public String redirect() {
+        // Forward to home page so that route is preserved.
+        return "forward:/";
+    }
+
    @Configuration
     @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -52,7 +59,8 @@ public class SpringPeronalCabApplication {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.httpBasic().and().logout().and().authorizeRequests()
-                    .antMatchers("/home.html", "/login.html", "/index.html", "/app/**", "/assests/**", "/webjars/**", "/").permitAll().anyRequest()
+                    .antMatchers("/home.html", "/login.html", "/index.html", "/app/**", "/assests/**",
+                            "/webjars/**", "/").permitAll().anyRequest()
                     .authenticated().and()
                     .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                     .csrf()

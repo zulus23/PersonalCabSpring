@@ -1,15 +1,15 @@
 <div class="container" ng-controller="HomeController as home" >
 <h1>Greeting</h1>
     <h1> RootScope: {{home.currentUser.authenticated}}</h1>
-<div ng-show="home.currentUser.authenticated">
+<div ng-show="home.authenticated()">
 
     <p>The ID is {{home.gretting.id}}</p>
     <p>The content is {{home.gretting.content}}</p>
     <button class="btn btn-default btn-info" ng-click="home.logout()"> Logout</a></button>
 </div>
-<div  ng-show="!home.currentUser.authenticated">
+<div  ng-show="!home.authenticated()">
     <p>Login to see your greeting</p>
-    <button class="btn btn-default btn-info" ><a href="#/login"> Login</a></button>
+    <button class="btn btn-default btn-info" ><a ui-sref="login"> Login</a></button>
 </div>
 
 

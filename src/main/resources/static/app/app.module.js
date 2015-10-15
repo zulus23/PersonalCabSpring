@@ -5,8 +5,10 @@
 (function(){
     'use strict'
 
-   angular.module('app',['ui.router'])
-       .config(['$urlRouterProvider','$httpProvider','$stateProvider',function($urlRouterProvider,$httpProvider,$stateProvider){
+   angular.module('app',['ui.router','person','auth'])
+       .config(['$urlRouterProvider','$httpProvider','$stateProvider','$locationProvider',
+           function($urlRouterProvider,$httpProvider,$stateProvider,$locationProvider){
+           $locationProvider.html5Mode(true);
            $urlRouterProvider.otherwise("/");
            $stateProvider.state("home",{
                url:"/",
@@ -14,12 +16,17 @@
            }).state("login",{
                url:"/login",
                templateUrl:'/app/login/login.html'
+           }).state("person",{
+               url:"/person",
+               templateUrl:'/app/person/person.html'
            });
 
+           $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest'
 
-           $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
-           $httpProvider.interceptors.push('APIInterceptor');
-       }]).service('APIInterceptor',function($rootScope){
+           //$httpProvider.interceptors.push('APIInterceptor');
+       }]).run(function(auth){
+            auth.init('/', '/login', '/logout');
+        });/*.service('APIInterceptor',function($rootScope){
            var service = this;
            service.request = function(config){
                 return config;
@@ -31,10 +38,11 @@
                 }
                return response;
            }
-       }).run( function(commonService){
+       }).run( function(commonService,$rootScope,$state){
             console.log("commonService "+commonService.currentUser);
            // commonService.currentUser();
-    });
+
+       });*/
 
 
 
