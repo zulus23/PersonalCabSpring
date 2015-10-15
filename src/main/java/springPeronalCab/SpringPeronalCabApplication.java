@@ -48,6 +48,7 @@ public class SpringPeronalCabApplication {
         return "forward:/";
     }
 
+
    @Configuration
     @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
